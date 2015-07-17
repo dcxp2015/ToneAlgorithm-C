@@ -4,7 +4,7 @@
 
 // m and n are hardcoded for now
 #define m 3
-#define n 1196
+#define n 1197
 
 #define SIGN(a,b) ((b) > 0.0 ? fabs(a) : - fabs(a))
 
@@ -33,9 +33,9 @@ typedef struct Point{
 }Point;
 
 typedef struct Vector{
-	double x;
-	double y;
-	double z;
+	double dx;
+	double dy;
+	double dz;
 }Vector;
 
 typedef struct Plane{
@@ -300,10 +300,7 @@ int main()
 	
 
 	// Initialize variables
-	double timestamp = 0;
-	double acceleration_x = 0;
-	double acceleration_y = 0;
-	double acceleration_z = 0;
+	double timestamp, acceleration_x, acceleration_y, acceleration_z = 0;
 	int numLines = 0;
 
 
@@ -328,8 +325,8 @@ int main()
 	// Allocate space for array of acceleration
 	// double *accelerationArray = malloc(sizeof(double) * numLines * 3);
 
-	// double timeArray[n];
-	// double xyzAccelerationArray[m][n];
+	double timeArray[n];
+	double xyzAccelerationArray[m][n][3];
 
 
 
@@ -338,6 +335,10 @@ int main()
 
 	char string[maxLength];
 	char* str;
+
+	int counter = 0;
+	int row;
+	int col;
 
 	while (fgets(string, maxLength, fp)) {
 		// Remove trailing \n
@@ -361,10 +362,20 @@ int main()
 		acceleration_y = atof(element3);
 		acceleration_z = atof(element4);
 
+		timeArray[counter] = timestamp;
+
+		row = counter / n;
+		col = counter % n;
+
+		xyzAccelerationArray[row][col][0] = acceleration_x;
+		xyzAccelerationArray[row][col][1] = acceleration_y;
+		xyzAccelerationArray[row][col][2] = acceleration_z;
+
 		// printf("%s %s %s %s\n", element1, element2, element3, element4);
-		printf("%f %f %f %f\n", timestamp, acceleration_x, acceleration_y, acceleration_z);
+		// printf("%f %f %f %f\n", timestamp, acceleration_x, acceleration_y, acceleration_z);
 		
 		// printf("%s\n", string);
+		counter ++;
 	}
 
 	printf("\n");
@@ -372,7 +383,7 @@ int main()
 
 	printf("end of file \n");
 
-
+	// printf("%f", timeArray[0]);
 
 	fclose(fp);
 
