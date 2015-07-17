@@ -45,6 +45,11 @@ typedef struct Plane{
 	Vector normal;	
 }Plane;
 
+typedef struct newCoord{
+	double u;
+	double v;
+}newCoord;
+
 
 
 // prints an arbitrary size matrix to the standard output
@@ -293,10 +298,70 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
 	return(0);
 }
 
+Point getPointOnPlane(Point point, Plane plane){
+	Point pointOnPlane;
+	// Code goes here
+	return pointOnPlane;
+}
+
+double distanceToPlane(Point point, Plane plane){
+	double dist;
+
+	Vector v = getVectorFromPoints(point, plane.point);
+	Vector normal = plane.normal;
+
+	dist = (abs(dotProduct(normal, v)) / magnitude(normal));
+
+	return dist;
+}
+
+Point intersectionOfThreeVectors(Vector v1, Vector v2, Vector v3){
+	Point intersect;
+	// Code goes here
+	// Need to find an implentation of the determinant or manually write determinants...
+	return intersect;
+}
+
+double dotProduct(Vector v1, Vector v2){
+	return v1.dx*v2.dx + v1.dy*v2.dy + v1.dz*v2.dz;
+}
+
+double magnitude(Vector v){
+	return sqrt(v.dx*v.dx + v.dy*v.dy + v.dz*v.dz);
+}
+
+Vector unitVector(Vector v){
+	Vector unitV;
+	double mag = magnitude(v);
+
+	unitV.dx = v.dx / mag;
+	unitV.dy = v.dy / mag;
+	unitV.dz = v.dz / mag;
+
+	return unitV;
+}
+
+Vector getVectorFromPoints(Point p1, Point p2){
+	Vector v;
+
+	v.dx = p2.x - p1.x;
+	v.dy = p2.y - p1.y;
+	v.dz = p2.z - p1.z;
+
+	return v;
+}
+
+newCoord rref(Point pointOnPlane, Plane plane){
+	newCoord uvCoord;
+	// Code goes here
+
+
+	return uvCoord;
+}
 
 int main()
 {
-	// Load time, a.x, a.y, a.z from raw_data.csv
+	// Load: time, a.x, a.y, a.z from raw_data.csv
 	
 
 	// Initialize variables
@@ -362,11 +427,14 @@ int main()
 		acceleration_y = atof(element3);
 		acceleration_z = atof(element4);
 
+
+		// Store timestamps
 		timeArray[counter] = timestamp;
 
 		row = counter / n;
 		col = counter % n;
 
+		// Store acceleration 
 		xyzAccelerationArray[row][col][0] = acceleration_x;
 		xyzAccelerationArray[row][col][1] = acceleration_y;
 		xyzAccelerationArray[row][col][2] = acceleration_z;
@@ -377,6 +445,21 @@ int main()
 		// printf("%s\n", string);
 		counter ++;
 	}
+	// End read from file
+
+	// Run Singular Variable Decomposition
+
+	// Get U and S
+
+	// Find intersection of vectors (0, 0, 0)
+
+	// Create plane
+
+	// Put points on to plane
+
+	// Find linear combination (rref)
+
+	// Return data
 
 	printf("\n");
 	printf("numLines: %d\n", numLines);
