@@ -300,7 +300,19 @@ int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
 
 Point getPointOnPlane(Point point, Plane plane){
 	Point pointOnPlane;
-	// Code goes here
+
+	double dist = distanceToPlane(point, plane);
+	Vector normal = plane.normal;
+
+	Vector v;
+	v.dx = dist*normal.dx;
+	v.dy = dist*normal.dy;
+	v.dz = dist*normal.dz;
+
+	pointOnPlane.x = point.x - v.dx;
+	pointOnPlane.y = point.y - v.dy;
+	pointOnPlane.z = point.z - v.dz;
+
 	return pointOnPlane;
 }
 
@@ -318,8 +330,32 @@ double distanceToPlane(Point point, Plane plane){
 Point intersectionOfThreeVectors(Vector v1, Vector v2, Vector v3){
 	Point intersect;
 	// Code goes here
-	// Need to find an implentation of the determinant or manually write determinants...
+	// Going to write my own implementation of the determinant/cross product
+	
+	// Create the vectors with 0s in the corresponding columns then do Cramer's Rule
+	Vector v1_1col0, v1_2col0, v1_3col0;
+	Vector v2_1col0, v2_2col0, v2_3col0;
+	Vector v3_1col0, v3_2col0, v3_3col0;
+
+	// ERIK YOU DO THIS SHIT
+
+
+	double botDet = determinant(v1, v2, v3);
+
+
 	return intersect;
+}
+
+double determinant(Vector v1, Vector v2, Vector v3){
+	double det;
+
+	double val1 = v1.dx*(v2.dy*v3.dz - v2.dz*v3.dy);
+	double val2 = v1.dy*(v2.dx*v3.dz - v2.dz*v3.dx);
+	double val3 = v1.dz*(v2.dx*v3.dy - v2.dy*v3.dx);
+
+	det = val1 - val2 + val3;
+
+	return det;
 }
 
 double dotProduct(Vector v1, Vector v2){
@@ -354,7 +390,49 @@ Vector getVectorFromPoints(Point p1, Point p2){
 newCoord rref(Point pointOnPlane, Plane plane){
 	newCoord uvCoord;
 	// Code goes here
+	// Create matrix
+	double mat[2][3];
+	
+	// Initialize variables
+	double a11 = plane.u.dx;
+	double a12 = plane.v.dx;
+	double a13 = pointOnPlane.x;
+	double a21 = plane.u.dy;
+	double a22 = plane.v.dy;
+	double a23 = pointOnPlane.y;
 
+	// Fill in the matrix
+	mat[0][0] = a11;
+	mat[0][1] = a12;
+	mat[0][2] = a13;
+	mat[1][0] = a21;
+	mat[1][1] = a22;
+	mat[1][2] = a23;
+
+	// Divide to make first column 
+	mat[0][0] = a11 / a11;
+	mat[0][1] = a12 / a11;
+	mat[0][2] = a13 / a11;
+	mat[1][0] = a21 / a21;
+	mat[1][1] = a22 / a21;
+	mat[1][2] = a23 / a21;
+
+	// Subtract Row1 from Row2
+	mat[1][0] = mat[1][0] - mat[0][0];
+	mat[1][1] = mat[1][1] - mat[0][1];
+	mat[1][2] = mat[1][2] - mat[0][2];
+
+	// Divide second row to get a22 to be 1
+	double temp = mat[1][1];
+	mat[1][1] = mat[1][1] - temp;
+	mat[1][2] = mat[1][2] - temp;
+
+	// Subtract Row2 from Row1
+	temp = mat[0][1];
+	mat[0][2] = mat[0][2] - temp*mat[1][2];
+
+	uvCoord.u = mat[0][2];
+	uvCoord.v = mat[1][2];
 
 	return uvCoord;
 }
