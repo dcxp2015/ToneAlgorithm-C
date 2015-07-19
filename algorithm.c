@@ -322,7 +322,7 @@ double distanceToPlane(Point point, Plane plane){
 	Vector v = getVectorFromPoints(point, plane.point);
 	Vector normal = plane.normal;
 
-	dist = (abs(dotProduct(normal, v)) / magnitude(normal));
+	dist = (fabs(dotProduct(normal, v)) / magnitude(normal));
 
 	return dist;
 }
@@ -523,6 +523,8 @@ int main()
 		// printf("%s\n", string);
 		counter ++;
 	}
+
+	fclose(fp);
 	// End read from file
 
 	// Run Singular Variable Decomposition
@@ -545,9 +547,6 @@ int main()
 	printf("end of file \n");
 
 	// printf("%f", timeArray[0]);
-
-	fclose(fp);
-
 
 	getchar();
 	return 0;
