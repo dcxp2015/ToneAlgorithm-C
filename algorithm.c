@@ -50,7 +50,11 @@ typedef struct newCoord{
 	double v;
 }newCoord;
 
-
+double distanceToPlane(Point point, Plane plane);
+double determinant(Vector v1, Vector v2, Vector v3);
+double dotProduct(Vector v1, Vector v2);
+double magnitude(Vector v);
+Vector getVectorFromPoints(Point p1, Point p2);
 
 // prints an arbitrary size matrix to the standard output
 void printMatrix(double **a, int rows, int cols);
@@ -98,6 +102,7 @@ decomposition, A = U * W * Vt.  A is replaced by U when svdcmp
 returns.  The diagonal matrix W is output as a vector w[nCols].
 V (not V transpose) is output as the matrix V[nCols][nCols].
 */
+
 int svdcmp(double **a, int nRows, int nCols, double *w, double **v) {
 	int flag, i, its, j, jj, k, l, nm;
 	double anorm, c, f, g, h, s, scale, x, y, z, *rv1;
@@ -328,7 +333,7 @@ double distanceToPlane(Point point, Plane plane){
 }
 
 Point intersectionOfThreeVectors(Vector v1, Vector v2, Vector v3){
-	Point intersect;
+	Point intersect = { 1, 1, 1 };
 	// Code goes here
 	// Going to write my own implementation of the determinant/cross product
 	
