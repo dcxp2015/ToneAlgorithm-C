@@ -41,8 +41,8 @@ typedef struct Vector{
 typedef struct Plane{
 	Vector u;
 	Vector v;
-	Point point;
-	Vector normal;	
+	Vector normal;
+	Point point;	
 }Plane;
 
 typedef struct newCoord{
@@ -547,14 +547,21 @@ int main()
 
 	// Run Singular Variable Decomposition
 	double uMatrix[3][3];
-	double vMatrix[3][3];
-	svdcmp(xyzAccelerationArray, 3, numLines, uMatrix, vMatrix);
+	double sMatrix[3][3];
+	svdcmp(xyzAccelerationArray, 3, numLines, uMatrix, sMatrix);
 
 	// Get U and S
+	Vector uVector = { uMatrix[0][0], uMatrix[0][1], uMatrix[0][2] };
+	Vector vVector = { uMatrix[1][0], uMatrix[1][1], uMatrix[1][2] };
+	Vector normalVector = { uMatrix[2][0], uMatrix[2][1], uMatrix[2][2] };
+
+	normalVector = unitVector(normalVector);
 
 	// Find intersection of vectors (0, 0, 0)
+	Point intersection = intersectionOfThreeVectors(uVector, vVector, normalVector);
 
 	// Create plane
+	Plane plane = { uVector, vVector, normalVector, intersection };
 
 	// Put points on to plane
 
