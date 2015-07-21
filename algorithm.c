@@ -338,15 +338,28 @@ Point intersectionOfThreeVectors(Vector v1, Vector v2, Vector v3){
 	// Going to write my own implementation of the determinant/cross product
 	
 	// Create the vectors with 0s in the corresponding columns then do Cramer's Rule
-	Vector v1_1col0, v1_2col0, v1_3col0;
-	Vector v2_1col0, v2_2col0, v2_3col0;
-	Vector v3_1col0, v3_2col0, v3_3col0;
+	Vector case1col0 = { 0, v1.dy, v1.dz };
+	Vector case1col1 = { 0, v2.dy, v2.dz };
+	Vector case1col2 = { 0, v3.dy, v3.dz };
 
-	// ERIK YOU DO THIS SHIT
+	Vector case2col0 = { v1.dx, 0, v1.dz };
+	Vector case2col1 = { v2.dx, 0, v2.dz };
+	Vector case2col2 = { v3.dx, 0, v3.dz };
 
+	Vector case3col0 = { v1.dx, v1.dy, 0 };
+	Vector case3col1 = { v2.dx, v2.dy, 0 };
+	Vector case3col2 = { v3.dx, v3.dy, 0 };
 
 	double botDet = determinant(v1, v2, v3);
+	double case1Det = determinant(case1col0, case1col1, case1col2);
+	double case2Det = determinant(case2col0, case2col1, case2col2);
+	double case3Det = determinant(case3col0, case3col1, case3col2);
 
+	double xCoord = case1Det / botDet;
+	double yCoord = case2Det / botDet;
+	double zCoord = case3Det / botDet;
+
+	intersect = { xCoord, yCoord, zCoord };
 
 	return intersect;
 }
@@ -533,6 +546,9 @@ int main()
 	// End read from file
 
 	// Run Singular Variable Decomposition
+	double uMatrix[3][3];
+	double vMatrix[3][3];
+	svdcmp(xyzAccelerationArray, 3, numLines, uMatrix, vMatrix);
 
 	// Get U and S
 
